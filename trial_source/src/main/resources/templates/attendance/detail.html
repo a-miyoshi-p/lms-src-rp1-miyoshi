@@ -55,8 +55,8 @@
 						<th class="w200">備考</th>
 					</tr>
 				</thead>
-
-				<tbody class="db">
+				<!--0210スタイル追加テスト-->
+				<tbody class="db" style="display: block; overflow-y: scroll; height: 360px">
 					<th:block th:each="attendanceManagementDto : ${attendanceManagementDtoList}" th:object="${attendanceManagementDto}">
 						<tr>
 							<td class="w160">[[*{#dates.format(trainingDate, 'yyyy年M月d日(E)')}]]</td>
@@ -87,6 +87,26 @@
 			return hours + ':' + minutes;
 		}
 	</script>
+	   <script th:inline="javascript">
+        /*<![CDATA[*/
+        
+        // サーバー側でスコープ登録したBoolean値を受け取る (true または false が入る)
+        const hasNotEnterDate = /*[[${hasNotEnterDate}]]*/ false;
+
+        // 画面読み込み完了時に実行
+        window.addEventListener('DOMContentLoaded', function() {
+			/* jQueryを使っている場合は以下の記述でも画面読み込み時の操作を定義できる
+				$(document).ready(function () {
+			*/
+            
+            // trueならアラートを出す
+            if (hasNotEnterDate) {
+                alert("過去日の勤怠に未入力があります。");
+            }
+        });
+        
+        /*]]>*/
+    </script>
 
 </body>
 </html>

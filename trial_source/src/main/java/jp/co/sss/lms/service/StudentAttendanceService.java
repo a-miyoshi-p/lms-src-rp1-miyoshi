@@ -1,6 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import jp.co.sss.lms.entity.TStudentAttendance;
 import jp.co.sss.lms.enums.AttendanceStatusEnum;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.form.DailyAttendanceForm;
+import jp.co.sss.lms.mapper.MLmsUserMapper;
 import jp.co.sss.lms.mapper.TStudentAttendanceMapper;
 import jp.co.sss.lms.util.AttendanceUtil;
 import jp.co.sss.lms.util.Constants;
@@ -43,6 +45,24 @@ public class StudentAttendanceService {
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
+
+	//0210追加分
+	@Autowired
+	private TrainingTime trainingTime;
+	@Autowired
+	private MLmsUserMapper mLmsUserMapper;
+	//	@Autowired
+	//	private MPlaceMapper mPlaceMapper;
+	//	@Autowired
+	//	private TCompanyAttendanceMapper tCompanyAttendanceMapper;
+	//	@Autowired
+	//	private TUserPlaceMapper tUserPlaceMapper;
+	//	@Autowired
+	//	private PlaceService placeService;
+	//	@Autowired
+	//	private CouseService couseService;
+	//	@Autowired
+	//	private CompanyService companyService;
 
 	/**
 	 * 勤怠一覧情報取得
@@ -332,6 +352,28 @@ public class StudentAttendanceService {
 		}
 		// 完了メッセージ
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
+	}
+
+	/**
+	 * Task.25 過去日の未入力チェック
+	 * 
+	 * 
+	 * @return 未入力勤怠の存在判定
+	 * @throws ParseExeption
+	 */
+	public boolean notEnterCheck() throws ParseException {
+		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy年MM月dd日");
+		Date today = new Date();
+//		String formattedToday = formatDate.format(today);
+
+		Integer notEnterCounter = tStudentAttendanceMapper.notEnterCount(loginUserDto.getLmsUserId(),
+				Constants.DB_FLG_FALSE, today);
+		if (notEnterCounter > 0) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }
