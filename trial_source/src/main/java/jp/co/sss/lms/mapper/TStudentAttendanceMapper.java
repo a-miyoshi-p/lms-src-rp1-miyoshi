@@ -72,5 +72,6 @@ public interface TStudentAttendanceMapper {
 	 * @param today
 	 */
 	Integer notEnterCount(@Param("lmsUserId") Integer lmsUserId, @Param("deleteFlg") Short deleteFlg,@Param("trainingDate") Date today);
-
+	//test　勤怠未入力チェックのリスト検索
+//	List<AttendanceManagementDto>notEnter(@Param("lmsUserId") Integer lmsUserId, @Param("deleteFlg") Short deleteFlg,@Param("trainingDate") Date today);
 }

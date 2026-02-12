@@ -65,6 +65,10 @@ public class AttendanceController {
 				hasNotEnterDate = true;
 			}
 		model.addAttribute("hasNotEnterDate", hasNotEnterDate);
+		//確認用
+		System.out.println("確認4:"+hasNotEnterDate);
+		
+		
 
 	return"attendance/detail";
 

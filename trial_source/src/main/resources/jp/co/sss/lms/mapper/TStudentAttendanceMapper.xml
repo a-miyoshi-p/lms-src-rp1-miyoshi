@@ -106,5 +106,18 @@
 		AND (training_start_time ='' OR training_end_time ='' OR
 		training_start_time IS NULL OR training_end_time IS NULL)
 	</select>
+<!--	勤怠未入力でカウントが消えないため確認用リストの検索-->
+<!--	<select id="notEnter" resultType="jp.co.sss.lms.dto.AttendanceManagementDto">-->
+<!--		SELECT *-->
+<!--		FROM t_student_attendance-->
+<!--		WHERE lms_user_id = #{lmsUserId}-->
+<!--		AND delete_flg = #{deleteFlg}-->
+<!--		<![CDATA[-->
+<!--		AND training_date < #{trainingDate}-->
+<!--		]]>-->
+<!--		AND status != 1-->
+<!--		AND (training_start_time ='' OR training_end_time ='' OR-->
+<!--		training_start_time IS NULL OR training_end_time IS NULL)-->
+<!--	</select>-->
 
 </mapper>

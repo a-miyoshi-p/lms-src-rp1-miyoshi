@@ -364,15 +364,23 @@ public class StudentAttendanceService {
 	public boolean notEnterCheck() throws ParseException {
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy年MM月dd日");
 		Date today = new Date();
-//		String formattedToday = formatDate.format(today);
-
+		String formattedToday = formatDate.format(today);
+//		System.out.println("確認1:"+today);
+//		List<AttendanceManagementDto> test = tStudentAttendanceMapper.notEnter(loginUserDto.getLmsUserId(),
+//				Constants.DB_FLG_FALSE, today);
+//		System.out.println(test);
+//		System.out.println("確認2:"+formattedToday);
 		Integer notEnterCounter = tStudentAttendanceMapper.notEnterCount(loginUserDto.getLmsUserId(),
 				Constants.DB_FLG_FALSE, today);
 		if (notEnterCounter > 0) {
+//			System.out.println("確認3:"+notEnterCounter);
 			return true;
 		} else {
+//			System.out.println("確認4:"+notEnterCounter);
 			return false;
 		}
+		
+		
 
 	}
 
