@@ -232,13 +232,17 @@ public class StudentAttendanceService {
 	 */
 	public AttendanceForm setAttendanceForm(
 			List<AttendanceManagementDto> attendanceManagementDtoList) {
-
 		AttendanceForm attendanceForm = new AttendanceForm();
 		attendanceForm.setAttendanceList(new ArrayList<DailyAttendanceForm>());
 		attendanceForm.setLmsUserId(loginUserDto.getLmsUserId());
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+		//Task.26
+		attendanceForm.setTrainingStartTimeHour(attendanceUtil.getHourMap());;
+		attendanceForm.setTrainingStartTimeMinute(attendanceUtil.getMinuteMap());
+		attendanceForm.setTrainingEndTimeHour(attendanceUtil.getHourMap());
+		attendanceForm.setTrainingEndTimeMinute(attendanceUtil.getMinuteMap());
 
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
@@ -251,24 +255,43 @@ public class StudentAttendanceService {
 		// 勤怠管理リストの件数分、日次の勤怠フォームに移し替え
 		for (AttendanceManagementDto attendanceManagementDto : attendanceManagementDtoList) {
 			DailyAttendanceForm dailyAttendanceForm = new DailyAttendanceForm();
+			//勤怠ID
 			dailyAttendanceForm
 					.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
+			//日付
 			dailyAttendanceForm
 					.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
+			//出勤時間
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
+			//時間・分の抜き出し
+			String startTimeStr = dailyAttendanceForm.getTrainingStartTime();
+			dailyAttendanceForm.setTrainingStartTimeHour(attendanceUtil.getHour(startTimeStr));
+			dailyAttendanceForm.setTrainingStartTimeMinute(attendanceUtil.getMinute(startTimeStr));
+			//退勤時間
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+			//時間・分の抜き出し
+			String endTimeStr = dailyAttendanceForm.getTrainingEndTime();
+			dailyAttendanceForm.setTrainingEndTimeHour(attendanceUtil.getHour(endTimeStr));
+			dailyAttendanceForm.setTrainingEndTimeMinute(attendanceUtil.getMinute(endTimeStr));
+			
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
 						attendanceUtil.calcBlankTime(attendanceManagementDto.getBlankTime())));
 			}
+			//勤怠状況
 			dailyAttendanceForm.setStatus(String.valueOf(attendanceManagementDto.getStatus()));
+			//備考
 			dailyAttendanceForm.setNote(attendanceManagementDto.getNote());
+			//セクション名
 			dailyAttendanceForm.setSectionName(attendanceManagementDto.getSectionName());
+			//当日フラグ
 			dailyAttendanceForm.setIsToday(attendanceManagementDto.getIsToday());
+			//日付（画面表示用）
 			dailyAttendanceForm.setDispTrainingDate(dateUtil
 					.dateToString(attendanceManagementDto.getTrainingDate(), "yyyy年M月d日(E)"));
+			//勤怠状況（画面表示用）
 			dailyAttendanceForm.setStatusDispName(attendanceManagementDto.getStatusDispName());
 
 			attendanceForm.getAttendanceList().add(dailyAttendanceForm);
@@ -363,25 +386,20 @@ public class StudentAttendanceService {
 	 */
 	public boolean notEnterCheck() throws ParseException {
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy年MM月dd日");
-		Date today = new Date();
-		String formattedToday = formatDate.format(today);
-//		System.out.println("確認1:"+today);
-//		List<AttendanceManagementDto> test = tStudentAttendanceMapper.notEnter(loginUserDto.getLmsUserId(),
-//				Constants.DB_FLG_FALSE, today);
-//		System.out.println(test);
-//		System.out.println("確認2:"+formattedToday);
+		Date date = new Date();
+		String formattedToday = formatDate.format(date);
+		Date today = formatDate.parse(formattedToday);
+
 		Integer notEnterCounter = tStudentAttendanceMapper.notEnterCount(loginUserDto.getLmsUserId(),
 				Constants.DB_FLG_FALSE, today);
 		if (notEnterCounter > 0) {
-//			System.out.println("確認3:"+notEnterCounter);
 			return true;
 		} else {
-//			System.out.println("確認4:"+notEnterCounter);
 			return false;
 		}
 		
 		
 
 	}
-
+	
 }

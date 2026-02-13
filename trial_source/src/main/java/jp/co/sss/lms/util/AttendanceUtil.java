@@ -147,4 +147,86 @@ public class AttendanceUtil {
 		return false;
 	}
 
+	//Task.26~追加分
+	//	public LinkedHashMap<Integer, String> setBlankTime(){
+	//		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+	//		map.put(null, "");
+	//	for (int i = 15; i < 480;) {
+	//		int hour = i / 60;
+	//		int minute = i % 60;
+	//		String time;
+	//
+	//		if (hour == 0) {
+	//			time = minute + "分";
+	//
+	//		} else if (minute == 0) {
+	//			time = hour + "時間";
+	//		} else {
+	//			time = hour + "時" + minute + "分";
+	//		}
+	//
+	//		map.put(i, time);
+	//
+	//		i = i + 15;
+	//
+	//	}
+	//	return map;
+	//	}
+	//1時間刻み
+	public LinkedHashMap<Integer, String> getHourMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+		for (int i = 0; i < 24; i++) {
+			String hour = i + "時間";
+			map.put(i, hour);
+		}
+		return map;
+
+	}
+
+	//1分刻み
+	public LinkedHashMap<Integer, String> getMinuteMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+		for (int i = 0; i < 60; i++) {
+			String minute = i + "分";
+			map.put(i, minute);
+		}
+		return map;
+	}
+
+	//時間、分の切り出し
+	//引数　開始時刻or終了時刻
+	public Integer getHour(String trainingTime) {
+		if (trainingTime == null || trainingTime.isEmpty() || !trainingTime.contains(":")) {
+			return null;
+		}
+		try {
+
+			String[] splitTime = trainingTime.split(":");
+			Integer splitHour = Integer.valueOf(splitTime[0]);
+			return splitHour;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Integer getMinute(String trainingTime) {
+//		String[] splitTime = trainingTime.split(":");
+//		Integer splitMinute = Integer.valueOf(splitTime[1]);
+//		return splitMinute;
+		if (trainingTime == null || trainingTime.isEmpty() || !trainingTime.contains(":")) {
+			return null;
+		}
+		try {
+			String[] splitTime = trainingTime.split(":");
+			Integer splitMinute = Integer.valueOf(splitTime[1]);
+			return splitMinute;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	//	calcJukoTime
+	//	reverseBlankTime
+	//	convertBlankTime
 }

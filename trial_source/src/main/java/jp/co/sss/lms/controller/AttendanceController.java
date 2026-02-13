@@ -40,7 +40,7 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
-	public String index(Model model)throws ParseException {
+	public String index(Model model) throws ParseException {
 
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
@@ -50,10 +50,10 @@ public class AttendanceController {
 		//現在より過去に未入力がないかチェック
 		//a．SimpleDateFormatクラスでフォーマットパターンを設定する
 		//b．現在日付を取得
-//		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy年MM月dd日");
-//		Date today = new Date();
-//		String formattedToday = formatDate.format(today);
-		
+		//		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy年MM月dd日");
+		//		Date today = new Date();
+		//		String formattedToday = formatDate.format(today);
+
 		//1．下記APIを呼び出し、過去日の未入力数をカウント
 		//API:勤怠情報（受講生入力）API．勤怠情報（受講生入力）未入力件数取得
 		//param ログイン情報DTO．LMSユーザID、削除フラグ（0）、②-Ⅱで取得した現在日付
@@ -62,15 +62,13 @@ public class AttendanceController {
 		//ダイアログ表示　JSのため　フラグの追加
 		boolean hasNotEnterDate = false;
 		if (studentAttendanceService.notEnterCheck()) {
-				hasNotEnterDate = true;
-			}
+			hasNotEnterDate = true;
+		}
 		model.addAttribute("hasNotEnterDate", hasNotEnterDate);
 		//確認用
-		System.out.println("確認4:"+hasNotEnterDate);
-		
-		
+		System.out.println("確認4:" + hasNotEnterDate);
 
-	return"attendance/detail";
+		return "attendance/detail";
 
 	}
 
@@ -132,7 +130,6 @@ public class AttendanceController {
 	 */
 	@RequestMapping(path = "/update")
 	public String update(Model model) {
-
 		// 勤怠管理リストの取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
