@@ -243,7 +243,7 @@ public class StudentAttendanceService {
 		attendanceForm.setTrainingStartTimeMinute(attendanceUtil.getMinuteMap());
 		attendanceForm.setTrainingEndTimeHour(attendanceUtil.getHourMap());
 		attendanceForm.setTrainingEndTimeMinute(attendanceUtil.getMinuteMap());
-
+		
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
 			attendanceForm
@@ -401,5 +401,14 @@ public class StudentAttendanceService {
 		
 
 	}
+//Task.26 入力フォームから登録するところ、時間分の結合	
+//	public void formatConversion(AttendanceForm attendanceForm) {
+//			if(!attendanceForm.getTrainingStartTimeHour().isEmpty()&&!attendanceForm.getTrainingStartTimeMinute().isEmpty()) {
+//				
+//			}
+//			if(!attendanceForm.getTrainingEndTimeHour().isEmpty()&&!attendanceForm.getTrainingEndTimeMinute().isEmpty()) {
+//				
+//			}
+//	}
 	
 }
