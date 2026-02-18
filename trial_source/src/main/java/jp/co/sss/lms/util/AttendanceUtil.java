@@ -147,32 +147,13 @@ public class AttendanceUtil {
 		return false;
 	}
 
-	//Task.26~追加分
-	//	public LinkedHashMap<Integer, String> setBlankTime(){
-	//		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
-	//		map.put(null, "");
-	//	for (int i = 15; i < 480;) {
-	//		int hour = i / 60;
-	//		int minute = i % 60;
-	//		String time;
-	//
-	//		if (hour == 0) {
-	//			time = minute + "分";
-	//
-	//		} else if (minute == 0) {
-	//			time = hour + "時間";
-	//		} else {
-	//			time = hour + "時" + minute + "分";
-	//		}
-	//
-	//		map.put(i, time);
-	//
-	//		i = i + 15;
-	//
-	//	}
-	//	return map;
-	//	}
-	//1時間刻み
+	/**
+	 * 時間のプルダウンマップを生成
+	 * 
+	 * @author miyoshi Task.26
+	 * @return map
+	 */
+
 	public LinkedHashMap<Integer, String> getHourMap() {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
 		map.put(null, "");
@@ -184,7 +165,12 @@ public class AttendanceUtil {
 
 	}
 
-	//1分刻み
+	/**
+	 * 分のプルダウンマップを生成
+	 * 
+	 * @author miyoshi Task.26
+	 * @return
+	 */
 	public LinkedHashMap<Integer, String> getMinuteMap() {
 		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
 		map.put(null, "");
@@ -195,8 +181,14 @@ public class AttendanceUtil {
 		return map;
 	}
 
-	//時間、分の切り出し
-	//引数　開始時刻or終了時刻
+	/**
+	 * 時間(時)の切り出し
+	 * 
+	 * @author miyoshi Task.26
+	 * @param trainingTime
+	 * @return splitHour
+	 */
+
 	public Integer getHour(String trainingTime) {
 		if (trainingTime == null || trainingTime.isEmpty() || !trainingTime.contains(":")) {
 			return null;
@@ -210,11 +202,16 @@ public class AttendanceUtil {
 			return null;
 		}
 	}
+	/**
+	 * 時間(分)の切り出し
+	 * 
+	 * @author miyoshi Task.26
+	 * @param trainingTime
+	 * @return splitMinute
+	 */
 
 	public Integer getMinute(String trainingTime) {
-//		String[] splitTime = trainingTime.split(":");
-//		Integer splitMinute = Integer.valueOf(splitTime[1]);
-//		return splitMinute;
+
 		if (trainingTime == null || trainingTime.isEmpty() || !trainingTime.contains(":")) {
 			return null;
 		}
@@ -226,7 +223,5 @@ public class AttendanceUtil {
 			return null;
 		}
 	}
-	//	calcJukoTime
-	//	reverseBlankTime
-	//	convertBlankTime
+
 }

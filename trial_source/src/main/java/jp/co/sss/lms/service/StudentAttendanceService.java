@@ -383,11 +383,9 @@ public class StudentAttendanceService {
 	}
 
 	/**
+	 * 過去日の未入力チェック
 	 * 
-	 * @author miyoshi
-	 * Task.25 過去日の未入力チェック
-	 * 
-	 * 
+	 * @author miyoshi Task.25
 	 * @return 未入力勤怠の存在判定
 	 * @throws ParseExeption
 	 */
@@ -399,15 +397,15 @@ public class StudentAttendanceService {
 
 		Integer notEnterCounter = tStudentAttendanceMapper.notEnterCount(loginUserDto.getLmsUserId(),
 				Constants.DB_FLG_FALSE, today);
-		if (notEnterCounter > 0) {
-			return true;
-		} else {
-			return false;
-		}
+
+		return notEnterCounter>0;
+		
+		
 
 	}
 
 	/**
+	 * フォーム内の「時」と「分」の入力を、「hh:mm」形式の文字列に変換してセット
 	 * 
 	 * @author miyoshi Task.26	
 	 * @param attendanceForm

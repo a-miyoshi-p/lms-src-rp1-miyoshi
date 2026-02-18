@@ -33,6 +33,7 @@ public class AttendanceController {
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
+	 * @author miyoshi Task.25 過去日の未入力チェック
 	 * @param lmsUserId
 	 * @param courseId
 	 * @param model
@@ -47,10 +48,8 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		boolean hasNotEnterDate = false;
-		if (studentAttendanceService.notEnterCheck()) {
-			hasNotEnterDate = true;
-		}
+		boolean hasNotEnterDate = studentAttendanceService.notEnterCheck();
+
 		model.addAttribute("hasNotEnterDate", hasNotEnterDate);
 
 		return "attendance/detail";
