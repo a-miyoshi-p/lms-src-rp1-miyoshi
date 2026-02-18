@@ -338,7 +338,7 @@ public class StudentAttendanceService {
 			}
 			tStudentAttendance.setLmsUserId(lmsUserId);
 			tStudentAttendance.setAccountId(loginUserDto.getAccountId());
-			//結合メソッドをここで実行する想定
+			//結合メソッドをここで実行する
 			formatConversion(attendanceForm);
 
 			// 出勤時刻整形
