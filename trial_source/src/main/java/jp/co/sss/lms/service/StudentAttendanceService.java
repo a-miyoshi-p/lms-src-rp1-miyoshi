@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -382,6 +383,8 @@ public class StudentAttendanceService {
 	}
 
 	/**
+	 * 
+	 * @author miyoshi
 	 * Task.25 過去日の未入力チェック
 	 * 
 	 * 
@@ -404,70 +407,75 @@ public class StudentAttendanceService {
 
 	}
 
-	//Task.26 入力フォームから登録するところ、時間分の結合	
+	/**
+	 * 
+	 * @author miyoshi Task.26	
+	 * @param attendanceForm
+	 */
 	public void formatConversion(AttendanceForm attendanceForm) {
 
-		//		if (attendanceForm.getTrainingStartTimeHour() != null && !attendanceForm.getTrainingStartTimeHour().isEmpty()
-		//				&& attendanceForm.getTrainingStartTimeMinute() != null
-		//				&& !attendanceForm.getTrainingStartTimeMinute().isEmpty()) {
-		//空は排除してるけど型の都合でorelse
-		//			String startHour = attendanceForm.getTrainingStartTimeHour().values().stream().findFirst().orElse(null);
-		//			String startMinute = attendanceForm.getTrainingStartTimeMinute().values().stream().findFirst().orElse(null);
-		//			for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-		//				dailyAttendanceForm.setTrainingStartTime(startHour + "" + startMinute);
-		//			}
-		//			for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-		//				String startHour = String.valueOf(dailyAttendanceForm.getTrainingStartTimeHour());
-		//				String startMinute = String.valueOf(dailyAttendanceForm.getTrainingStartTimeMinute());
-		//				String formattedTime = String.format("%02d:%02d", startHour, startMinute);
-		//				System.out.println("テスト"+attendanceForm.getTrainingStartTimeHour());
-		//				dailyAttendanceForm.setTrainingStartTime(formattedTime);
-		//			}
-
-		//		}
-		//最有力候補上と下のコメントアウト部分から組み合わせ
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
 			if (dailyAttendanceForm.getTrainingStartTimeHour() != null
 					&& dailyAttendanceForm.getTrainingStartTimeMinute() != null) {
-				//				String startHour = String.valueOf(dailyAttendanceForm.getTrainingStartTimeHour());
-				//				String startMinute = String.valueOf(dailyAttendanceForm.getTrainingStartTimeMinute());
 				Integer startHour = dailyAttendanceForm.getTrainingStartTimeHour();
 				Integer startMinute = dailyAttendanceForm.getTrainingStartTimeMinute();
 				String formattedTime = String.format("%02d:%02d", startHour, startMinute);
-				System.out.println("テスト" + attendanceForm.getTrainingStartTimeHour());
 				dailyAttendanceForm.setTrainingStartTime(formattedTime);
 			}
 
 			if (dailyAttendanceForm.getTrainingEndTimeHour() != null
 					&& dailyAttendanceForm.getTrainingEndTimeMinute() != null) {
-				//				String endHour = String.valueOf(dailyAttendanceForm.getTrainingEndTimeHour());
-				//				String endMinute = String.valueOf(dailyAttendanceForm.getTrainingEndTimeMinute());
 				Integer endHour = dailyAttendanceForm.getTrainingEndTimeHour();
 				Integer endMinute = dailyAttendanceForm.getTrainingEndTimeMinute();
 				String formattedTime = String.format("%02d:%02d", endHour, endMinute);
 				dailyAttendanceForm.setTrainingEndTime(formattedTime);
-				System.out.println("テスト" + attendanceForm.getTrainingStartTimeHour());
 			}
 		}
 
-		//		if (attendanceForm.getTrainingEndTimeHour() != null && !attendanceForm.getTrainingEndTimeHour().isEmpty()
-		//				&& attendanceForm.getTrainingEndTimeMinute() != null
-		//				&& !attendanceForm.getTrainingEndTimeMinute().isEmpty()) {
-		//			String endHour = attendanceForm.getTrainingStartTimeHour().values().stream().findFirst().orElse(null);
-		//			String endMinute = attendanceForm.getTrainingStartTimeMinute().values().stream().findFirst().orElse(null);
-		//			for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-		//				dailyAttendanceForm.setTrainingEndTime(endHour + "" + endMinute);
-		//			}
-		//			for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
-		//				String endHour = String.valueOf(dailyAttendanceForm.getTrainingEndTimeHour());
-		//				String endMinute = String.valueOf(dailyAttendanceForm.getTrainingEndTimeMinute());
-		//				String formattedTime = String.format("%02d:%02d", endHour, endMinute);
-		//				//				dailyAttendanceForm.setTrainingStartTime(startHour + "" + startMinute);
-		//				dailyAttendanceForm.setTrainingStartTime(formattedTime);
-		//			}
-		//		}
+		
 	}
 
 	//Task.27 updateInputCheck
+	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
+		//		[loop] DailyAttendanceForm ごとにチェックを実施。 
+		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+			//	    * 備考の文字数チェック（100文字以内）。 
+			if (dailyAttendanceForm.getNote().length() < 100) {
+				//errors.propaties.maxlength＞constantsリソースキー
+				//メッセージの設定について確認
+			}
+			//	    * 時刻の「時」だけ、「分」だけといった片側未入力チェック。 
+			//出勤
+			if (dailyAttendanceForm.getTrainingStartTimeHour() != null
+					&& dailyAttendanceForm.getTrainingStartTimeMinute() != null) {
 
+			}
+			//退勤
+			if (dailyAttendanceForm.getTrainingEndTimeHour() != null
+					&& dailyAttendanceForm.getTrainingEndTimeMinute() != null) {
+
+			}
+			//formatConvarsion後にこの処理する必要あり
+			//	    * 「出勤なし、退勤あり」の矛盾チェック。  
+			if (dailyAttendanceForm.getTrainingStartTime().isEmpty()
+					&& !dailyAttendanceForm.getTrainingEndTime().isEmpty()) {
+
+			}
+			//	    * [if エラーがなければ] 出勤時刻 ＞ 退勤時刻 になっていないか比較チェック。
+			if (result.hasErrors()) {
+				if (dailyAttendanceForm.getTrainingStartTime()
+						.compareTo(dailyAttendanceForm.getTrainingEndTime()) == 1) {
+
+				}
+
+			}
+			//	    * [if 中抜け時間が入力されている場合] 出退勤の差分から計算される最大受講時間よりも中抜け時間が長くないかチェック。
+			if (dailyAttendanceForm.getBlankTime() != null) {
+				//TrainingTimeUtilを使用　確認
+				
+			}
+
+		}
+
+	}
 }
