@@ -137,10 +137,12 @@ public class AttendanceController {
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
-
 		// 更新
-		String message = studentAttendanceService.update(attendanceForm);
+		String message = studentAttendanceService.update(attendanceForm,result);
 		model.addAttribute("message", message);
+		if(result.hasErrors()) {
+			return "attendance/update";
+		}
 		// 一覧の再取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
