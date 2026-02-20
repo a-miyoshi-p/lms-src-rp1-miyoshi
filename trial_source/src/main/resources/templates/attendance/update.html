@@ -11,18 +11,26 @@
 	<th:block th:if="${session.loginUserDto.role == '0001'}">
 		<h2>勤怠管理</h2>
 	</th:block>
-	
+
 	<th:block th:if="${session.loginUserDto.role != '0001'}">
 		<h2>勤怠管理 <small>( [[${attendanceForm.userName}]] )</small></h2>
 		<th:block th:if="${session.loginUserDto.leaveFlg == '1'}">
 			<h2><small>途中退校日：${dispLeaveDate}</small></h2>
 		</th:block>
 	</th:block>
-
 	<div class="row">
 		<div class="bs-component col-sm-12">
-
+			<div th:if="${#fields.hasErrors('${attendanceForm.*}')}">
+				<ul>
+					<li class="help-inline error" th:each="error : ${#fields.errors('${attendanceForm.*}')}" th:text="${error}"></li>
+				</ul>
+			</div>
 			<form th:action="@{/attendance/update}" method="post">
+				<!--				<div th:if="${#fields.hasAnyErrors()}">-->
+				<!--					<ul>-->
+				<!--						<li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li>-->
+				<!--					</ul>-->
+				<!--				</div>-->
 				<table class="table table-hover dataTable no-footer">
 					<thead style="display: block;">
 						<tr>
