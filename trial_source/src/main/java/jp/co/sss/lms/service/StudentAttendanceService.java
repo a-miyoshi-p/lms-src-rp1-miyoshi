@@ -458,8 +458,8 @@ public class StudentAttendanceService {
 			}
 			//	    * 時刻の「時」だけ、「分」だけといった片側未入力チェック。 
 			//出勤時間　時間が入力、分が未入力
-			if (dailyAttendanceForm.getTrainingStartTimeHour() == null
-					&& dailyAttendanceForm.getTrainingStartTimeMinute() != null) {
+			if (dailyAttendanceForm.getTrainingStartTimeHour() != null
+					&& dailyAttendanceForm.getTrainingStartTimeMinute() == null) {
 				//エラーメッセージの設定
 				System.out.println("片側未入力" + i);
 				System.out.println("チェック用" + "attendanceList[" + i + "].trainingStartTimeMinute");
@@ -470,8 +470,8 @@ public class StudentAttendanceService {
 				//						messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "出勤時間" })));
 			}
 			//出勤時間　時間が未入力、分が入力
-			if ((dailyAttendanceForm.getTrainingStartTimeHour() != null
-					&& dailyAttendanceForm.getTrainingStartTimeMinute() == null)) {
+			if ((dailyAttendanceForm.getTrainingStartTimeHour() == null
+					&& dailyAttendanceForm.getTrainingStartTimeMinute() != null)) {
 				//エラーメッセージの設定
 				System.out.println("片側未入力" + i);
 				System.out.println("チェック用" + "attendanceList[" + i + "].trainingStartTimeHour");
@@ -481,8 +481,8 @@ public class StudentAttendanceService {
 			}
 
 			//出勤時間　時間が入力、分が未入力
-			if (dailyAttendanceForm.getTrainingEndTimeHour() == null
-					&& dailyAttendanceForm.getTrainingEndTimeMinute() != null) {
+			if (dailyAttendanceForm.getTrainingEndTimeHour() != null
+					&& dailyAttendanceForm.getTrainingEndTimeMinute() == null) {
 				//エラーメッセージの設定
 				System.out.println("片側未入力" + i);
 				System.out.println("チェック用" + "attendanceList[" + i + "].trainingEndTimeMinute");
@@ -491,8 +491,8 @@ public class StudentAttendanceService {
 						new Object[] { "退勤時間" }, null);
 
 			}
-			if (dailyAttendanceForm.getTrainingEndTimeHour() != null
-					&& dailyAttendanceForm.getTrainingEndTimeMinute() == null) {
+			if (dailyAttendanceForm.getTrainingEndTimeHour() == null
+					&& dailyAttendanceForm.getTrainingEndTimeMinute() != null) {
 				//エラーメッセージの設定
 				System.out.println("片側未入力" + i);
 				System.out.println("チェック用" + "attendanceList[" + i + "].trainingEndTimeHour");

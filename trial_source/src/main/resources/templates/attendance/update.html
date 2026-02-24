@@ -21,11 +21,16 @@
 	<div class="row">
 		<div class="bs-component col-sm-12">
 			<div th:if="${#fields.hasErrors('${attendanceForm.*}')}">
-				<ul>
-					<li class="help-inline error" th:each="error : ${#fields.errors('${attendanceForm.*}')}" th:text="${error}"></li>
+				<ul style="padding-left: 0; list-style: none;">
+					<li class="help-inline error" th:each="error : ${#sets.toSet(#fields.errors('attendanceForm.*'))}"
+						th:text="'*' + '&nbsp' + ${error}"></li>
+<!--					<li class="help-inline error" th:each="error : ${#fields.errors('${attendanceForm.*}')}"-->
+<!--						th:text="${error}"></li>-->
 				</ul>
 			</div>
-			<form th:action="@{/attendance/update}" method="post">
+			<form th:action="@{/attendance/update}" method="post" th:object="${attendanceForm}"
+				onsubmit="return isChecked()">
+				<!--			<form th:action="@{/attendance/update}" method="post">-->
 				<!--				<div th:if="${#fields.hasAnyErrors()}">-->
 				<!--					<ul>-->
 				<!--						<li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li>-->
@@ -46,7 +51,8 @@
 						</tr>
 					</thead>
 					<tbody style="display: block; overflow-y: scroll; height: 560px">
-						<th:block th:each="dailyAttendanceForm, stat : *{attendanceForm.attendanceList}">
+						<th:block th:each="dailyAttendanceForm, stat : *{attendanceList}">
+							<!--<th:block th:each="dailyAttendanceForm, stat : *{attendanceForm.attendanceList}">-->
 							<tr>
 								<th:block>
 									<input type="hidden" th:name="|attendanceList[${stat.index}].isToday|"
@@ -65,11 +71,13 @@
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
 								<td class="w60">
-									<input type="button" class="btn btn-success" value="定時"></input>
+									<input type="button" class="btn btn-success" value="定時" th:onclick="'onTime('+${stat.index}+')'"></input>
 								</td>
 								<td class="w70">
 									<select th:name="|attendanceList[${stat.index}].trainingStartTimeHour|"
-										class="form-control" errorstyleclass="form-control errorInput" indexed="true">
+										th:id="|trainingStartTimeHour_${stat.index}|"
+										th:class="${#fields.hasErrors('attendanceList['+ stat.index +'].trainingStartTimeHour')} ? 'form-control errorInput':'form-control'"
+										indexed="true">
 										<option
 											th:each="trainingStartTimeHour : ${attendanceForm.trainingStartTimeHour}"
 											th:value="${trainingStartTimeHour.key}" th:inlne="text" class="form-control"
@@ -80,7 +88,9 @@
 								<td>:</td>
 								<td>
 									<select th:name="|attendanceList[${stat.index}].trainingStartTimeMinute|"
-										class="form-control" errorstyleclass="form-control errorInput" indexed="true">
+									th:id="|trainingStartTimeMinute_${stat.index}|"
+										th:class="${#fields.hasErrors('attendanceList['+ stat.index +'].trainingStartTimeMinute')} ? 'form-control errorInput':'form-control'"
+										indexed="true">
 										<option
 											th:each="trainingStartTimeMinute : ${attendanceForm.trainingStartTimeMinute}"
 											th:value="${trainingStartTimeMinute.key}" th:inlne="text"
@@ -91,7 +101,9 @@
 								</td>
 								<td>
 									<select th:name="|attendanceList[${stat.index}].trainingEndTimeHour|"
-										class="form-control" errorstyleclass="form-control errorInput" indexed="true">
+										th:id="|trainingEndTimeHour_${stat.index}|"
+										th:class="${#fields.hasErrors('attendanceList['+ stat.index +'].trainingEndTimeHour')} ? 'form-control errorInput':'form-control'"
+										indexed="true">
 										<option th:each="trainingEndTimeHour : ${attendanceForm.trainingEndTimeHour}"
 											th:value="${trainingEndTimeHour.key}" th:inlne="text" class="form-control"
 											th:selected="${trainingEndTimeHour.key == dailyAttendanceForm.trainingEndTimeHour}">
@@ -101,7 +113,9 @@
 								<td>:</td>
 								<td>
 									<select th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|"
-										class="form-control" errorstyleclass="form-control errorInput" indexed="true">
+										th:id="|trainingEndTimeMinute_${stat.index}|"
+										th:class="${#fields.hasErrors('attendanceList['+ stat.index +'].trainingEndTimeMinute')} ? 'form-control errorInput':'form-control'"
+										indexed="true">
 										<option
 											th:each="trainingEndTimeMinute : ${attendanceForm.trainingEndTimeMinute}"
 											th:value="${trainingEndTimeMinute.key}" th:inlne="text" class="form-control"
@@ -110,8 +124,9 @@
 									</select>
 								</td>
 								<td>
-									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control"
-										errorstyleclass="form-control errorInput" indexed="true">
+									<select th:name="|attendanceList[${stat.index}].blankTime|"
+										th:class="${#fields.hasErrors('attendanceList['+ stat.index +'].blankTime')} ? 'form-control errorInput':'form-control'"
+										indexed="true">
 										<option th:each="blankTime : ${attendanceForm.blankTimes}"
 											th:value="${blankTime.key}" th:inlne="text" class="form-control"
 											th:selected="${blankTime.key == dailyAttendanceForm.blankTime}">
@@ -121,8 +136,9 @@
 								<td class="w70">[[${dailyAttendanceForm.statusDispName}]]</td>
 								<td class="w140">
 									<input type="text" th:name="|attendanceList[${stat.index}].note|"
-										th:value="${dailyAttendanceForm.note}" class="form-control"
-										errorstyleclass="form-control errorInput" indexed="true"></input>
+										th:value="${dailyAttendanceForm.note}"
+										th:class="${#fields.hasErrors('attendanceList['+ stat.index +'].note')} ? 'form-control errorInput':'form-control'"
+										indexed="true"></input>
 								</td>
 							</tr>
 						</th:block>
@@ -142,7 +158,26 @@
 			</form>
 		</div>
 	</div>
-
+	<!--更新確認ダイアログ-->
+	<script type="text/javascript" th:inline="javascript">
+		function isChecked() {
+			return confirm('更新します。よろしいですか？');
+		}
+	</script>
+<!--	Task.28 定時ボタン　試作　各フォームにid付与、定時ボタンにonclick属性付与-->
+<!--	<script>-->
+<!--		function onTime(index){-->
+<!--			const trainingStartTimeHour = document.getElementById('trainingStartTimeHour_'+index);-->
+<!--			const trainingStartTimeMinute = document.getElementById('trainingStartTimeMinute_'+index);-->
+<!--			const trainingEndTimeHour = document.getElementById('trainingEndTimeHour_'+index);-->
+<!--			const trainingEndTimeMinute = document.getElementById('trainingEndTimeMinute_'+index);-->
+			
+<!--			trainingStartTimeHour.value = '9';-->
+<!--			trainingStartTimeMinute.value = '0';-->
+<!--			trainingEndTimeHour.value = '18';-->
+<!--			trainingEndTimeMinute.value = '0';-->
+<!--		}-->
+<!--	</script>-->
 </body>
 
 </html>

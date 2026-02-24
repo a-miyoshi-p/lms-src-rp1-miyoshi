@@ -136,14 +136,23 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	public String complete(@ModelAttribute AttendanceForm attendanceForm, BindingResult result, Model model)
+	public String complete(@ModelAttribute("attendanceForm") AttendanceForm attendanceForm, BindingResult result, Model model)
 			throws ParseException {
+		//確認ダイアログ表示用
+//		boolean isChecked = false;
 		//入力チェック
 		studentAttendanceService.updateInputCheck(attendanceForm,result);
 		if(result.hasErrors()) {
 			System.out.println("入力チェックテスト"+result.getErrorCount());
 			return "attendance/update";
 		}
+//		else {
+////			//チェック済みフラグ
+////			isChecked =true;
+////			System.out.println("チェック抜けたかテスト"+isChecked);
+////			model.addAttribute("isChecked",isChecked);
+//		}
+		
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm,result);
 		model.addAttribute("message", message);
